@@ -1,0 +1,9 @@
+
+*========================================*
+	|OpenViBE meta repository| |README|
+*========================================*
+
+TODO
+
+This is a meta-repository|countaining openvibe sdk, openvibe community plugins and designer.
+Use "git submodule update --init --recursive" to fetch all submodules.
