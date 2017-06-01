@@ -4,6 +4,11 @@ setlocal enableextensions
 
 set BuildType=Release
 set BuildOption=--release
+set base_dir=%~dp0
+set build_dir_base=%base_dir%\build
+set install_dir_base=%base_dir%\dist
+
+:parameter_parse
 if /i "%1"=="-h" (
 	echo Usage: win32-build.cmd [Build Type] [Init-env Script]
 	echo -- Build Type option can be : --release (-r^), --debug (-d^). Default is Release.
@@ -17,26 +22,44 @@ if /i "%1"=="-h" (
 ) else if /i "%1"=="-d" (
 	set BuildType=Debug
 	set BuildOption=--debug
+	SHIFT
+	Goto parameter_parse
 ) else if /i "%1"=="--debug" (
 	set BuildType=Debug	
 	set BuildOption=--debug
+	SHIFT
+	Goto parameter_parse
 ) else if /i "%1"=="-r" (
 	set BuildType=Release
 	set BuildOption=--release
+	SHIFT
+	Goto parameter_parse
 ) else if /i "%1"=="--release" (
 	set BuildType=Release
 	set BuildOption=--release
+	SHIFT
+	Goto parameter_parse
+) else if /i "%1"=="--build-dir" (
+	set build_dir_base=%2
+	SHIFT
+	SHIFT
+	Goto parameter_parse
+) else if /i "%1"=="--install-dir" (
+	set install_dir_base=%2
+	SHIFT
+	SHIFT
+	Goto parameter_parse
 )
 
 set base_dir=%~dp0
 echo Building certivibe
 cd %base_dir%\certivibe\scripts
-call windows-build.cmd --no-pause %BuildOption% --build-dir %base_dir%\build\certivibe-%BuildType% --install-dir %base_dir%\dist\certivibe-%BuildType%
+call windows-build.cmd --no-pause %BuildOption% --build-dir %build_dir_base%\certivibe-%BuildType% --install-dir %install_dir_base%\certivibe-%BuildType%
 
 echo Building studio
 cd %base_dir%\studio\scripts
-call windows-build.cmd --no-pause %BuildOption% --build-dir %base_dir%\build\studio-%BuildType% --install-dir %base_dir%\dist\studio-%BuildType% --sdk %base_dir%\dist\certivibe-%BuildType% --dep %base_dir%\certivibe\dependencies
+call windows-build.cmd --no-pause %BuildOption% --build-dir %build_dir_base%\studio-%BuildType% --install-dir %install_dir_base%\studio-%BuildType% --sdk %install_dir_base%\certivibe-%BuildType% --dep %base_dir%\certivibe\dependencies
 
 echo Building extras
 cd %base_dir%\openvibe\scripts
-call win32-build.cmd --no-pause %BuildOption% --build-dir %base_dir%\build\openvibe-%BuildType% --install-dir %base_dir%\dist\openvibe-%BuildType% --studiosdk %base_dir%\dist\studio-%BuildType% 
+call win32-build.cmd --no-pause %BuildOption% --build-dir %build_dir_base%\openvibe-%BuildType% --install-dir %install_dir_base%\openvibe-%BuildType% --studiosdk %install_dir_base%\studio-%BuildType% 
