@@ -39,14 +39,14 @@ while [[ $# -gt 0 ]]; do
 	shift
 done
 
-echo Building certivibe
-cd ${base_dir}/certivibe/scripts
-./unix-build ${BuildOption} --build-dir ${build_dir_base}/certivibe-${BuildType} --install-dir ${install_dir_base}/certivibe-${BuildType}
+echo Building extras
+cd ${base_dir}/extras/scripts
+./unix-build ${BuildOption} --build-dir ${build_dir_base}/extras-${BuildType} --install-dir ${install_dir_base}/extras-${BuildType}
 
-echo Building studio
-cd ${base_dir}/studio/scripts
-./unix-build ${BuildOption} --build-dir ${build_dir_base}/studio-${BuildType} --install-dir ${install_dir_base}/studio-${BuildType} --sdk ${install_dir_base}/certivibe-${BuildType} --dep ${base_dir}/certivibe/dependencies
+echo Building designer
+cd ${base_dir}/designer/scripts
+./unix-build ${BuildOption} --build-dir ${build_dir_base}/designer-${BuildType} --install-dir ${install_dir_base}/designer-${BuildType} --sdk ${install_dir_base}/extras-${BuildType} --dep ${base_dir}/extras/dependencies
 
 echo Building extras
-cd ${base_dir}/openvibe/scripts
-linux-build ${BuildOption} --build-dir ${build_dir_base}/openvibe-${BuildType} --install-dir ${install_dir_base}/openvibe-${BuildType} --studiosdk ${install_dir_base}/studio-${BuildType} 
+cd ${base_dir}/extras/scripts
+linux-build ${BuildOption} --build-dir ${build_dir_base}/extras-${BuildType} --install-dir ${install_dir_base}/extras-${BuildType} --studiosdk ${install_dir_base}/designer-${BuildType} 

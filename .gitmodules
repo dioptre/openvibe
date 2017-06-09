@@ -1,9 +1,9 @@
-[submodule "certivibe"]
-	path = certivibe
+[submodule "sdk"]
+	path = sdk
 	url = git@github.com:mensiatech/certivibe.git
-[submodule "studio"]
-	path = studio
+[submodule "designer"]
+	path = designer
 	url = git@bitbucket.org:mensiatech/studio.git
-[submodule "openvibe"]
-	path = openvibe
-	url = git+ssh://tgaugry@scm.gforge.inria.fr/gitroot/openvibe/openvibe.git
+[submodule "extras"]
+	path = extras
+	url = git+ssh://scm.gforge.inria.fr/gitroot/openvibe/openvibe.git
