@@ -41,12 +41,12 @@ done
 
 echo Building certivibe
 cd ${base_dir}/certivibe/scripts
-call windows-build.cmd ${BuildOption} --build-dir ${build_dir_base}/certivibe-${BuildType} --install-dir ${install_dir_base}/certivibe-${BuildType}
+./unix-build ${BuildOption} --build-dir ${build_dir_base}/certivibe-${BuildType} --install-dir ${install_dir_base}/certivibe-${BuildType}
 
 echo Building studio
 cd ${base_dir}/studio/scripts
-call windows-build.cmd ${BuildOption} --build-dir ${build_dir_base}/studio-${BuildType} --install-dir ${install_dir_base}/studio-${BuildType} --sdk ${install_dir_base}/certivibe-${BuildType} --dep ${base_dir}/certivibe/dependencies
+./unix-build ${BuildOption} --build-dir ${build_dir_base}/studio-${BuildType} --install-dir ${install_dir_base}/studio-${BuildType} --sdk ${install_dir_base}/certivibe-${BuildType} --dep ${base_dir}/certivibe/dependencies
 
 echo Building extras
 cd ${base_dir}/openvibe/scripts
-call win32-build.cmd ${BuildOption} --build-dir ${build_dir_base}/openvibe-${BuildType} --install-dir ${install_dir_base}/openvibe-${BuildType} --studiosdk ${install_dir_base}/studio-${BuildType} 
+linux-build ${BuildOption} --build-dir ${build_dir_base}/openvibe-${BuildType} --install-dir ${install_dir_base}/openvibe-${BuildType} --studiosdk ${install_dir_base}/studio-${BuildType} 
