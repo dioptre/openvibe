@@ -61,11 +61,22 @@ set base_dir=%~dp0
 echo Building sdk
 cd %base_dir%\sdk\scripts
 call windows-build.cmd --no-pause %BuildOption% --build-dir %build_dir_base%\sdk-%BuildType% --install-dir %install_dir_base%\sdk-%BuildType% --dependencies-dir %dependencies_dir% --build-unit --build-validation
-
+if !errorlevel! neq 0 (
+	echo Error while building sdk
+	exit /b !errorlevel!
+)
 echo Building designer
 cd %base_dir%\designer\scripts
 call windows-build.cmd --no-pause %BuildOption% --build-dir %build_dir_base%\designer-%BuildType% --install-dir %install_dir_base%\designer-%BuildType% --sdk %install_dir_base%\sdk-%BuildType% --dependencies-dir %dependencies_dir%
+if !errorlevel! neq 0 (
+	echo Error while building designer
+	exit /b !errorlevel!
+)
 
 echo Building extras
 cd %base_dir%\extras\scripts
-call win32-build.cmd --no-pause %BuildOption% --build-dir %build_dir_base%\extras-%BuildType% --install-dir %install_dir_base%\extras-%BuildType% --certsdk %install_dir_base%\designer-%BuildType% --studiosdk %install_dir_base%\designer-%BuildType% --dependencies-dir %dependencies_dir%
+call win32-build.cmd --no-pause %BuildOption% --build-dir %build_dir_base%\extras-%BuildType% --install-dir %install_dir_base%\extras-%BuildType% --sdk %install_dir_base%\designer-%BuildType% --designer %install_dir_base%\designer-%BuildType% --dependencies-dir %dependencies_dir%
+if !errorlevel! neq 0 (
+	echo Error while building extras
+	exit /b !errorlevel!
+)
