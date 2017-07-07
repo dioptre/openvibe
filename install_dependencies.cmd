@@ -50,3 +50,13 @@ if !errorlevel! neq 0 (
 	exit /b !errorlevel!
 )
 
+echo Creating OpenViBE extras dependency path setup script
+set "dependency_cmd=%dependencies_dir%\win32-dependencies.cmd"
+echo @ECHO OFF >%dependency_cmd%
+echo. >>%dependency_cmd%
+echo SET "dependencies_base=%dependencies_dir%" >>%dependency_cmd%
+echo. >>%dependency_cmd%
+type %base_dir%\extras\scripts\win32-dependencies.cmd-base >>%dependency_cmd%
+
+echo Done.
+
