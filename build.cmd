@@ -58,7 +58,6 @@ if /i "%1"=="-h" (
 ) else if /i "%1"=="--vsbuild" (
 	set vsbuild=--vsbuild
 	SHIFT
-	SHIFT
 	Goto parameter_parse
 )
 

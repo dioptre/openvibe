@@ -1,8 +1,10 @@
 @echo off
+setlocal EnableDelayedExpansion
+setlocal enableextensions 
 
-set PATH=C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin;%PATH%
+set "script_dir=%~dp0"
 set BuildType=Release
-set builddir=%CD%\build
+set builddir=%script_dir%\build
 set USE_EXPRESS=0
 
 for %%A in (%*) DO (
@@ -10,19 +12,50 @@ for %%A in (%*) DO (
 		set BuildType=Debug
 	)
 )
-
-
-
+set PATH_DEPENDENCIES=%script_dir%\dependencies
 set SDKPath=%builddir%\sdk-%BuildType%\OpenVIBE.sln
 set DesignerPath=%builddir%\designer-%BuildType%\Designer.sln
 set ExtrasPath=%builddir%\extras-%BuildType%\OpenVIBE.sln
 
-REM SET "OV_PATH_ROOT=%CD%\..\..\certivibe-build\dist-%BuildType%"
+SET "OV_PATH_ROOT=%script_dir%\dist\sdk-%BuildType%"
+SET "DESIGNER_PATH_ROOT=%script_dir%\dist\designer-%BuildType%"
+SET "EXTRAS_PATH_ROOT=%script_dir%\dist\extras-%BuildType%"
 REM SET "OV_PATH_BIN=%OV_PATH_ROOT%\bin"
 REM SET "OV_PATH_DATA=%OV_PATH_ROOT%\share\openvibe"
 REM SET "OV_PATH_LIB=%OV_PATH_ROOT%\bin"
-REM SET "PATH=%OV_PATH_ROOT%\bin;%PATH%"
+set args=%PATH_DEPENDENCIES%
+SET "PATH=%EXTRAS_PATH_ROOT%\bin;%DESIGNER_PATH_ROOT%\bin;%OV_PATH_ROOT%\bin;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin;%PATH%"
 
+call :addToPathIfExists cmake\bin
+call :addToPathIfExists ninja
+call :addToPathIfExists expat\bin
+call :addToPathIfExists itpp\bin
+call :addToPathIfExists lua\lib
+call :addToPathIfExists gtk\bin
+call :addToPathIfExists cegui\bin
+call :addToPathIfExists cegui\dependencies\bin
+call :addToPathIfExists pthreads\lib
+call :addToPathIfExists openal\libs\win32
+call :addToPathIfExists freealut\lib
+call :addToPathIfExists libogg\win32\bin\release
+call :addToPathIfExists libogg\win32\bin\debug
+call :addToPathIfExists libvorbis\win32\bin\release
+call :addToPathIfExists libvorbis\win32\bin\debug
+call :addToPathIfExists liblsl\lib
+call :addToPathIfExists ogre\bin\release
+call :addToPathIfExists ogre\bin\debug
+call :addToPathIfExists vrpn\bin
+call :addToPathIfExists openal\libs\Win32
+call :addToPathIfExists liblsl\lib
+call :addToPathIfExists sdk-brainproducts-actichamp
+call :addToPathIfExists sdk-mcs\lib
+call :addToPathIfExists xerces-c\lib
+call :addToPathIfExists vcredist
+call :addToPathIfExists boost\bin
+call :addToPathIfExists tvicport\bin
+call :addToPathIfExists vcredist
+call :addToPathIfExists zip
+echo !PATH!
 
 if not defined SKIP_VS2017 (
 	SET SKIP_VS2017=1
@@ -70,6 +103,17 @@ if %SKIP_VS2013% == 1 (
 	)
 )
 
+goto launch
+
+:addToPathIfExists
+for %%A in (%args%) DO (
+	if exist "%%A\%~1\" (
+		set "PATH=%%A\%~1;!PATH!"
+	)
+)
+exit /B 0
+
+
 :launch
 
 if %USE_EXPRESS% == 1 (
@@ -82,7 +126,10 @@ if %USE_EXPRESS% == 1 (
 	)
 ) else (
 	echo Use %VSCMake%
-	start /b "%VSINSTALLDIR%\Common7\IDE\devenv.exe" %SDKPath%
-	start /b "%VSINSTALLDIR%\Common7\IDE\devenv.exe" %DesignerPath%
-	start /b "%VSINSTALLDIR%\Common7\IDE\devenv.exe" %ExtrasPath%
+	set "OV_PATH_DATA=%script_dir%\dist\sdk-%BuildType%\share\openvibe"
+	start /b "" "%VSINSTALLDIR%\Common7\IDE\devenv.exe" %SDKPath%
+	set "OV_PATH_DATA=%script_dir%\dist\designer-%BuildType%\share\openvibe"
+	start /b "" "%VSINSTALLDIR%\Common7\IDE\devenv.exe" %DesignerPath%
+	set "OV_PATH_DATA=%script_dir%\dist\extras-%BuildType%\share\openvibe"
+	start /b "" "%VSINSTALLDIR%\Common7\IDE\devenv.exe" %ExtrasPath%
 )

@@ -7,3 +7,12 @@ TODO
 
 This is a meta-repository|countaining openvibe sdk, openvibe community plugins and designer.
 Use "git submodule update --init --recursive" to fetch all submodules.
+
+
+TODO : dependencies folder creation
+
+To build the whole project, execute build.cmd
+To build the project for visual studio, use build.cmd --vsbuild
+
+
+To start all projects on visual studio, use launchvc.cmd or launchvc_debug.cmd
