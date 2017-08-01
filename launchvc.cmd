@@ -13,7 +13,7 @@ for %%A in (%*) DO (
 	)
 )
 set PATH_DEPENDENCIES=%script_dir%\dependencies
-set SDKPath=%builddir%\sdk-%BuildType%\OpenVIBE.sln
+set SDKPath=%builddir%\sdk\OpenVIBE.sln
 set DesignerPath=%builddir%\designer-%BuildType%\Designer.sln
 set ExtrasPath=%builddir%\extras-%BuildType%\OpenVIBE.sln
 
@@ -123,16 +123,21 @@ if %USE_EXPRESS% == 1 (
 	)
 ) else (
 	echo Use %VSCMake%
-	REM SET "OV_PATH_BIN=%script_dir%\dist\sdk-%BuildType%\bin"
-	REM SET "OV_PATH_LIB=%script_dir%\dist\sdk-%BuildType%\bin"
-	REM set "OV_PATH_DATA=%script_dir%\dist\sdk-%BuildType%\share\openvibe"
-	REM start /b "" "%VSINSTALLDIR%\Common7\IDE\devenv.exe" %SDKPath%
+	SET "OV_PATH_BIN=%script_dir%\dist\sdk-%BuildType%\bin"
+	SET "OV_PATH_LIB=%script_dir%\dist\sdk-%BuildType%\bin"
+	set "OV_PATH_DATA=%script_dir%\dist\sdk-%BuildType%\share\openvibe"
+	start /b "" "%VSINSTALLDIR%\Common7\IDE\devenv.exe" %SDKPath%
 	REM SET "OV_PATH_BIN=%script_dir%\dist\designer-%BuildType%\bin"
 	REM SET "OV_PATH_LIB=%script_dir%\dist\designer-%BuildType%\bin"
 	REM set "OV_PATH_DATA=%script_dir%\dist\designer-%BuildType%\share\openvibe"
 	REM start /b "" "%VSINSTALLDIR%\Common7\IDE\devenv.exe" %DesignerPath%
-	SET "OV_PATH_BIN=%script_dir%\dist\extras-%BuildType%\bin"
-	SET "OV_PATH_LIB=%script_dir%\dist\extras-%BuildType%\bin"
-	set "OV_PATH_DATA=%script_dir%\dist\extras-%BuildType%\share\openvibe"
-	start /b "" "%VSINSTALLDIR%\Common7\IDE\devenv.exe" %ExtrasPath%
+	REM SET "OV_PATH_BIN=%script_dir%\dist\extras-%BuildType%\bin"
+	REM SET "OV_PATH_LIB=%script_dir%\dist\extras-%BuildType%\bin"
+	REM set "OV_PATH_DATA=%script_dir%\dist\extras-%BuildType%\share\openvibe"
+	REM start /b "" "%VSINSTALLDIR%\Common7\IDE\devenv.exe" %ExtrasPath%
+	
+	REM SET "OV_PATH_BIN=%script_dir%\dist\extras-%BuildType%\bin"
+	REM SET "OV_PATH_LIB=%script_dir%\dist\extras-%BuildType%\bin"
+	REM set "OV_PATH_DATA=%script_dir%\dist\extras-%BuildType%\share\openvibe"
+	REM start /b "" "%VSINSTALLDIR%\Common7\IDE\devenv.exe" OpenViBE-meta.sln
 )

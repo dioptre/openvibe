@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SDK", "SDK", "{10313F85-EFD9-42AB-BF90-643A406FDD99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Designer", "Designer", "{EEB9310A-3238-432D-9EAD-CDFCB35054D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extras", "Extras", "{3F5EF7F3-0F10-4F2E-ACEB-3B1326E3DA48}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Designer-Extras", "designer-extras.vcxproj", "{C003281C-E8FC-49FE-8B50-37A6035730D7}"
+EndProject
+{%- for project in proj_list %}
+{{ project }}
+{%- endfor %}
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		MinSizeRel|Win32 = MinSizeRel|Win32
+		Release|Win32 = Release|Win32
+		RelWithDebInfo|Win32 = RelWithDebInfo|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+{# #}
+	{%- for project in proj_conf_platforms %}
+		{{- project -}}
+	{% endfor -%}
+{# #}	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	{%- for key, val in nested_projs.items() %}
+		{{ "{" }}{{ key }}{{ "}" }} = {{ "{" }}{{ val }}{{ "}" -}}
+	{%- endfor %}
+	EndGlobalSection
+EndGlobal
