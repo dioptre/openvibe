@@ -3,7 +3,7 @@ BuildType=Release
 BuildOption=--release
 base_dir=$(dirname "$(readlink -f "$0")")
 build_dir_base="${base_dir}/build"
-install_dir_base= "${base_dir}/dist"
+install_dir_base="${base_dir}/dist"
 dependencies_dir="${base_dir}/dependencies"
 
 while [[ $# -gt 0 ]]; do
@@ -46,16 +46,16 @@ done
 
 echo Building sdk
 cd ${base_dir}/sdk/scripts
-./unix-build ${BuildOption} --build-dir ${build_dir_base}/sdk-${BuildType} --install-dir ${install_dir_base}/sdk-${BuildType} --dependencies-dir ${dependencies_dir} --build-unit --build-validation
-if [ $? -neq 0 ] ; then
+./unix-build --build-type ${BuildType} --build-dir ${build_dir_base}/sdk-${BuildType} --install-dir ${install_dir_base}/sdk-${BuildType} --dependencies-dir ${dependencies_dir} --build-unit --build-validation
+if [[ ! $? -eq 0 ]]; then
 	echo "Error while building sdk"
 	exit $?
 fi
 
 echo Building designer
 cd ${base_dir}/designer/scripts
-./unix-build ${BuildOption} --build-dir ${build_dir_base}/designer-${BuildType} --install-dir ${install_dir_base}/designer-${BuildType} --sdk ${install_dir_base}/sdk-${BuildType} --dependencies-dir ${dependencies_dir}
-if [ $? -neq 0 ] ; then
+./unix-build --build-type=${BuildType} --build-dir=${build_dir_base}/designer-${BuildType} --install-dir=${install_dir_base}/designer-${BuildType} --sdk=${install_dir_base}/sdk-${BuildType}
+if [[ ! $? -eq 0 ]]; then
 	echo "Error while building designer"
 	exit $?
 fi
@@ -63,7 +63,7 @@ fi
 echo Building extras
 cd ${base_dir}/extras/scripts
 ./linux-build ${BuildOption} --build-dir ${build_dir_base}/extras-${BuildType} --install-dir ${install_dir_base}/extras-${BuildType} --sdk ${install_dir_base}/sdk-${BuildType} --designer ${install_dir_base}/designer-${BuildType} --dependencies-dir ${dependencies_dir}
-if [ $? -neq 0 ] ; then
+if [[ ! $? -eq 0 ]]; then
 	echo "Error while building extras"
 	exit $?
 fi
