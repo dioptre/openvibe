@@ -5,7 +5,7 @@ node {
         ]
     def BuildOption = BuildOptions[BuildType]
     stage('Build SDK') {
-		git url: 'git@github.com:mensiatech/certivibe.git', branch: 'master'
+		git url: 'git@github.com:mensiatech/certivibe.git', branch: "${params.SDKBranch}"
         dir ("scripts") {
             if(isUnix()) {
                 sh "echo ${params.BuildType}"
@@ -30,7 +30,7 @@ node {
         }
     }
     stage('Build Designer') {
-		git url: 'git@bitbucket.org:mensiatech/studio.git', branch: 'master'
+		git url: 'git@bitbucket.org:mensiatech/studio.git', branch: "${params.DesignerBranch}"
         dir ("scripts") {
             if(isUnix()) {
                 sh "./unix-build --build-type=${params.BuildType} --build-dir=${WORKSPACE}/build/designer-${params.BuildType} --install-dir=${WORKSPACE}/dist/designer-${params.BuildType} --sdk=${WORKSPACE}/dist/sdk-${params.BuildType}"
@@ -40,7 +40,7 @@ node {
         }
     }
     stage('Build Extras') {
-		git url: 'https://scm.gforge.inria.fr/anonscm/git/openvibe/openvibe.git', branch: 'feature-thga-core-1009-multi-config-build'
+		git url: 'https://scm.gforge.inria.fr/anonscm/git/openvibe/openvibe.git', branch: "${params.ExtrasBranch}"
         dir ("scripts") {
             if(isUnix()) {
                 sh "./linux-build ${BuildOption} --build-dir ${WORKSPACE}/build/extras-${params.BuildType} --install-dir ${WORKSPACE}/dist/extras-${params.BuildType} --sdk ${WORKSPACE}/dist/sdk-${params.BuildType} --designer ${WORKSPACE}/dist/designer-${params.BuildType} --dependencies-dir /builds/dependencies"
