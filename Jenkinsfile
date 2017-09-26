@@ -1,7 +1,7 @@
 node("${params.NodeName}") {
 	// Add some informations about the build
 	manager.addShortText("${params.BuildType}", "red", "white", "0px", "white")
-	manager.addShortText("${params.NodeName} ", "blue", "white", "0px", "white")
+	manager.addShortText("${NodeName}", "blue", "white", "0px", "white")
 	manager.addShortText("${params.SDKBranch}/${params.DesignerBranch}/${params.ExtrasBranch}", "black", "white", "0px", "white")
 
     def BuildOptions = [
