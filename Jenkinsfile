@@ -1,4 +1,4 @@
-node {
+node("${params.NodeName}") {
     def BuildOptions = [
         "Release" : "--release",
         "Debug" : "--debug"
