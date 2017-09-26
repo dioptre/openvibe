@@ -1,9 +1,15 @@
 node("${params.NodeName}") {
+	// Add some informations about the build
+	manager.addShortText("${params.BuildType}", "red", "white", "0px", "white")
+	manager.addShortText("${params.NodeName} ", "blue", "white", "0px", "white")
+	manager.addShortText("${params.SDKBranch}/${params.DesignerBranch}/${params.ExtrasBranch}", "black", "white", "0px", "white")
+
     def BuildOptions = [
         "Release" : "--release",
         "Debug" : "--debug"
         ]
     def BuildOption = BuildOptions[BuildType]
+	
     stage('Build SDK') {
 		git url: 'git@github.com:mensiatech/certivibe.git', branch: "${params.SDKBranch}"
         dir ("scripts") {
