@@ -1,4 +1,4 @@
-node("${params.NodeName}") {
+node("${NodeName}") {
 	// Add some informations about the build
 	manager.addShortText("${params.BuildType}", "red", "white", "0px", "white")
 	manager.addShortText("${NodeName}", "blue", "white", "0px", "white")
