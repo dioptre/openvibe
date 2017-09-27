@@ -1,6 +1,7 @@
 #!/usr/local/bin/python
 
 import re
+import sys
 from os.path import join as joinpath, split as splitpath, exists as existspath, normpath, dirname, abspath, relpath, realpath
 import jinja2
 import argparse
@@ -83,5 +84,10 @@ if __name__ == "__main__":
 							for item in res :
 								key, val = re.search('{([\dABCDEF-]+)}\s=\s{([\dABCDEF-]+)}', item).groups()
 								context['nested_projs'][key] = val
-
-	renderToFile(outfile, slntpl_path, context)
+	try :
+		renderToFile(outfile, slntpl_path, context)
+	except :
+		print('Could not generate %s' % (outfile,))
+		sys.exit(1)
+	else :
+		print('Project [%s] generated' % (outfile,))
