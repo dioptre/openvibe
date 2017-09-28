@@ -112,5 +112,5 @@ if not defined multibuild_all (
 	call win32-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\extras --install-dir %install_dir_base%\extras --sdk %install_dir_base%\sdk --designer %install_dir_base%\designer --dependencies-dir %dependencies_dir%
 	
 	echo Generating meta project
-	call python.exe generateVS.py --builddir %build_dir_base% --outsln %build_dir_base%\OpenViBE-Meta.sln
+	call python.exe %base_dir%\visual_gen\generateVS.py --builddir %build_dir_base% --outsln %build_dir_base%\OpenViBE-Meta.sln
 )

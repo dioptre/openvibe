@@ -35,8 +35,10 @@ if __name__ == "__main__":
 	build_dir = abspath(args.builddir)
 	dist_dir = joinpath(dirname(build_dir), 'dist')
 	outfile = args.outsln
-	slntpl_path="OpenViBE-Meta.sln-tpl"
-	usertpl_path="vcxproj.user-tpl"
+	script_dir = dirname(realpath(__file__))
+	slntpl_path = joinpath(script_dir, "OpenViBE-Meta.sln-tpl")
+	usertpl_path = joinpath(script_dir, "vcxproj.user-tpl")
+	designerex_path = joinpath(script_dir, "designer-extras.vcxproj-tpl")
 	
 	context = { 'proj_list' : [], 'proj_conf_platforms' : [], 'nested_projs' : {}}
 	projects = [ 
@@ -47,7 +49,8 @@ if __name__ == "__main__":
 	
 	# Generate config file for designer-extras project
 	ov_env = { type : (joinpath(dist_dir, "Extras".lower(), type, "bin", "openvibe-designer.exe"), 'OV_PATH_ROOT=' + joinpath(dist_dir, "Extras".lower(), type)) for type in build_types}
-	renderToFile("designer-extras.vcxproj.user", usertpl_path, { 'configurations' : ov_env} )
+	renderToFile(joinpath(build_dir, "designer-extras.vcxproj"), designerex_path, {} )
+	renderToFile(joinpath(build_dir, "designer-extras.vcxproj.user"), usertpl_path, { 'configurations' : ov_env} )
 	
 	for folderName, folderId, path_sln in projects :
 		pathprefix = relpath(dirname(path_sln), normpath(dirname(abspath(outfile))))
