@@ -80,7 +80,7 @@ if /i "%1"=="-h" (
 if not defined multibuild_all (
 	echo Building sdk
 	cd %base_dir%\sdk\scripts
-	call windows-build.cmd --no-pause %vsbuild% %BuildOption% --build-dir %build_dir_base%\sdk-%BuildType% --install-dir %install_dir_base%\sdk-%BuildType% --dependencies-dir %dependencies_dir% --build-unit --build-validation %UserDataSubdir%
+	call windows-build.cmd --no-pause %vsbuild% %BuildOption% --build-dir %build_dir_base%\sdk-%BuildType% --install-dir %install_dir_base%\sdk-%BuildType% --dependencies-dir %dependencies_dir% %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input  
 	if !errorlevel! neq 0 (
 		echo Error while building sdk
 		exit /b !errorlevel!
@@ -104,12 +104,12 @@ if not defined multibuild_all (
 ) else (
 	echo Building sdk
 	cd %base_dir%\sdk\scripts
-	call windows-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\sdk --install-dir %install_dir_base%\sdk --dependencies-dir %dependencies_dir% --build-unit --build-validation %UserDataSubdir%
-	call windows-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\sdk --install-dir %install_dir_base%\sdk --dependencies-dir %dependencies_dir% --build-unit --build-validation %UserDataSubdir%
+	call windows-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\sdk --install-dir %install_dir_base%\sdk --dependencies-dir %dependencies_dir% %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input 
+	call windows-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\sdk --install-dir %install_dir_base%\sdk --dependencies-dir %dependencies_dir% %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input  
 
 	echo Building designer
 	cd %base_dir%\designer\scripts
-	call windows-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\designer --install-dir %install_dir_base%\designer --sdk %install_dir_base%\sdk --dependencies-dir %dependencies_dir%
+	call windows-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\designer --install-dir %install_dir_base%\designer --sdk %install_dir_base%\sdk --dependencies-dir %dependencies_dir% %UserDataSubdir%
 	call windows-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\designer --install-dir %install_dir_base%\designer --sdk %install_dir_base%\sdk --dependencies-dir %dependencies_dir% %UserDataSubdir%
 
 	echo Building extras

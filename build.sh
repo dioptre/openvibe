@@ -50,7 +50,7 @@ done
 
 echo Building sdk
 cd ${base_dir}/sdk/scripts
-./unix-build --build-type ${BuildType} --build-dir ${build_dir_base}/sdk-${BuildType} --install-dir ${install_dir_base}/sdk-${BuildType} --dependencies-dir ${dependencies_dir} ${user_data_subdir} --build-unit --build-validation
+./unix-build --build-type ${BuildType} --build-dir ${build_dir_base}/sdk-${BuildType} --install-dir ${install_dir_base}/sdk-${BuildType} --dependencies-dir ${dependencies_dir} ${user_data_subdir} --build-unit --build-validation --test-data-dir ${dependencies_dir}/test-input
 if [[ ! $? -eq 0 ]]; then
 	echo "Error while building sdk"
 	exit $?
