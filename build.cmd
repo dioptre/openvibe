@@ -9,7 +9,6 @@ set build_dir_base=%base_dir%\build
 set install_dir_base=%base_dir%\dist
 set dependencies_dir=%base_dir%\dependencies
 
-
 :parameter_parse
 if /i "%1"=="-h" (
 	echo Usage: win32-build.cmd [Build Type] [Init-env Script]
@@ -73,9 +72,9 @@ if /i "%1"=="-h" (
 	SHIFT
 	SHIFT
 	Goto parameter_parse
-) else if not "%1" == "" (
-	echo unrecognized option [%1]
-	exit 1
+) else if /i "%1" neq "" (
+	echo Unknown parameter "%1"
+	exit /b 1
 )
 
 if not defined multibuild_all (
@@ -119,5 +118,9 @@ if not defined multibuild_all (
 	call win32-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\extras --install-dir %install_dir_base%\extras --sdk %install_dir_base%\sdk --designer %install_dir_base%\designer --dependencies-dir %dependencies_dir% %UserDataSubdir%
 	
 	echo Generating meta project
-	call python.exe %base_dir%\visual_gen\generateVS.py --builddir %build_dir_base% --outsln %build_dir_base%\OpenViBE-Meta.sln
+	python.exe %base_dir%\visual_gen\generateVS.py --builddir %build_dir_base% --outsln %build_dir_base%\OpenViBE-Meta.sln
+	if !errorlevel! neq 0 (
+		echo Error constructing the meta .sln file
+		exit /b !errorlevel!
+	)
 )
