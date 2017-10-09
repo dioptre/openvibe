@@ -18,7 +18,7 @@ node("${NodeName}") {
         dir ("scripts") {
             if(isUnix()) {
                 sh "echo ${params.BuildType}"
-                sh "./unix-build --build-type ${params.BuildType} --build-dir ${WORKSPACE}/build/sdk-${params.BuildType} --install-dir ${WORKSPACE}/dist/sdk-${buildtype} --dependencies-dir /builds/dependencies --gtest-lib-dir /builds/dependencies/libgtest --test-data-dir /builds/dependencies/test-input --build-unit --build-validation"
+                sh "./unix-build --build-type ${params.BuildType} --build-dir ${WORKSPACE}/build/sdk-${params.BuildType} --install-dir ${WORKSPACE}/dist/sdk-${params.BuildType} --dependencies-dir /builds/dependencies --gtest-lib-dir /builds/dependencies/libgtest --test-data-dir /builds/dependencies/test-input --build-unit --build-validation"
             } else {
                 error("TODO")
             }
