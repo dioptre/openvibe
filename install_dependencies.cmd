@@ -2,13 +2,12 @@
 setlocal EnableDelayedExpansion
 setlocal enableextensions 
 
+REM The dependencies are hosted by Inria
+set PROXYPASS=anon:anon
+set URL=http://openvibe.inria.fr/dependencies/win32/2.0.0/
+
 set base_dir=%~dp0
 set dependencies_dir=%base_dir%\dependencies
-
-REM As long as the sdk/designer dependencies are hosted within Mensia, 
-REM you need to provide credentials below...
-set PROXYPASS=
-set URL=https://extranet.mensiatech.com/dependencies
 
 :parameter_parse
 if /i "%1"=="-h"  (
@@ -30,7 +29,7 @@ if /i "%1"=="-h"  (
 
 if not exist "%dependencies_dir%\arch\data" ( mkdir "%dependencies_dir%\arch\data" )
 if not exist "%dependencies_dir%\arch\build\windows" ( mkdir "%dependencies_dir%\arch\build\windows" )
-if not exist "%dependencies_dir%_x64\arch\build\windows" ( mkdir "%dependencies_dir%_x64\arch\build\windows" )
+rem if not exist "%dependencies_dir%_x64\arch\build\windows" ( mkdir "%dependencies_dir%_x64\arch\build\windows" )
 
 set base_dir=%~dp0
 echo Installing sdk dependencies
@@ -49,10 +48,6 @@ if !errorlevel! neq 0 (
 	echo Error while installing Designer dependencies
 	exit /b !errorlevel!
 )
-
-REM The 'extras' dependencies are hosted by Inria ...
-set PROXYPASS=anon:anon
-set URL=http://openvibe.inria.fr/dependencies/win32/2.0.0/
 
 echo Installing OpenViBE extras dependencies
 cd %base_dir%\extras\scripts
