@@ -1,9 +1,9 @@
 [submodule "sdk"]
 	path = sdk
-	url = git@github.com:mensiatech/certivibe.git
+	url = git@gitlab.inria.fr:openvibe/sdk.git
 [submodule "designer"]
 	path = designer
-	url = git@bitbucket.org:mensiatech/studio.git
+	url = git@gitlab.inria.fr:openvibe/designer.git
 [submodule "extras"]
 	path = extras
-	url = git+ssh://scm.gforge.inria.fr/gitroot/openvibe/openvibe.git
+	url = git@gitlab.inria.fr:openvibe/extras.git
