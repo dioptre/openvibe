@@ -14,7 +14,7 @@ node("${NodeName}") {
     def BuildOption = BuildOptions[BuildType]
 	
     stage('Build SDK') {
-		git url: 'git@github.com:mensiatech/certivibe.git', branch: "${params.SDKBranch}"
+		git url: 'https://gitlab.inria.fr/openvibe/sdk.git', branch: "${params.SDKBranch}"
         dir ("scripts") {
             if(isUnix()) {
                 sh "echo ${params.BuildType}"
@@ -26,6 +26,12 @@ node("${NodeName}") {
     }
     stage('Tests SDK') {
         dir ("build/sdk-${params.BuildType}") {
+			dir("unit-test/Testing") {
+				deleteDir()
+			}
+			dir("validation-test/Testing") {
+				deleteDir()
+			}
             if(isUnix()) {
                 sh './ctest-launcher.sh -T Test ; exit 0'
             } else {
@@ -39,7 +45,7 @@ node("${NodeName}") {
         }
     }
     stage('Build Designer') {
-		git url: 'git@bitbucket.org:mensiatech/studio.git', branch: "${params.DesignerBranch}"
+		git url: 'https://gitlab.inria.fr/openvibe/designer.git', branch: "${params.DesignerBranch}"
         dir ("scripts") {
             if(isUnix()) {
                 sh "./unix-build --build-type=${params.BuildType} --build-dir=${WORKSPACE}/build/designer-${params.BuildType} --install-dir=${WORKSPACE}/dist/designer-${params.BuildType} --sdk=${WORKSPACE}/dist/sdk-${params.BuildType}"
@@ -49,7 +55,7 @@ node("${NodeName}") {
         }
     }
     stage('Build Extras') {
-		git url: 'https://scm.gforge.inria.fr/anonscm/git/openvibe/openvibe.git', branch: "${params.ExtrasBranch}"
+		git url: 'https://gitlab.inria.fr/openvibe/extras.git', branch: "${params.ExtrasBranch}"
         dir ("scripts") {
             if(isUnix()) {
                 sh "./linux-build ${BuildOption} --build-dir ${WORKSPACE}/build/extras-${params.BuildType} --install-dir ${WORKSPACE}/dist/extras-${params.BuildType} --sdk ${WORKSPACE}/dist/sdk-${params.BuildType} --designer ${WORKSPACE}/dist/designer-${params.BuildType} --dependencies-dir /builds/dependencies"
@@ -60,6 +66,9 @@ node("${NodeName}") {
     }
     stage('Tests Extras') {
         dir ("build/extras-${params.BuildType}") {
+			dir("Testing") {
+				deleteDir()
+			}
             if(isUnix()) {
                 wrap([$class: 'Xvfb']) {
                     sh "ctest -T Test ; exit 0"
