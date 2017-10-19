@@ -1,9 +1,12 @@
 [submodule "sdk"]
 	path = sdk
 	url = git@gitlab.inria.fr:openvibe/sdk.git
+	branch = master
 [submodule "designer"]
 	path = designer
 	url = git@gitlab.inria.fr:openvibe/designer.git
+	branch = master
 [submodule "extras"]
 	path = extras
 	url = git@gitlab.inria.fr:openvibe/extras.git
+	branch = master
