@@ -9,4 +9,4 @@
 [submodule "extras"]
 	path = extras
 	url = git@gitlab.inria.fr:openvibe/extras.git
-	branch = master
+	branch = wip-all-openvibe20-base
