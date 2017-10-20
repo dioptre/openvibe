@@ -118,7 +118,14 @@ if not defined multibuild_all (
 	call win32-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\extras --install-dir %install_dir_base%\extras --sdk %install_dir_base%\sdk --designer %install_dir_base%\designer --dependencies-dir %dependencies_dir% %UserDataSubdir%
 	
 	echo Generating meta project
-	python.exe %base_dir%\visual_gen\generateVS.py --builddir %build_dir_base% --outsln %build_dir_base%\OpenViBE-Meta.sln
+	where /q python
+	if !errorlevel! neq 0 (
+		echo Python not in path, trying C:\python34\python ...
+		set my_python=C:\python34\python
+	) else (
+		set my_python=python
+	)
+	%my_python% %base_dir%\visual_gen\generateVS.py --builddir %build_dir_base% --outsln %build_dir_base%\OpenViBE-Meta.sln
 	if !errorlevel! neq 0 (
 		echo Error constructing the meta .sln file
 		exit /b !errorlevel!
