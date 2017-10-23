@@ -8,6 +8,7 @@ set base_dir=%~dp0
 set build_dir_base=%base_dir%\build
 set install_dir_base=%base_dir%\dist
 set dependencies_dir=%base_dir%\dependencies
+set UserDataSubdir=openvibe20
 
 :parameter_parse
 if /i "%1"=="-h" (
@@ -68,7 +69,7 @@ if /i "%1"=="-h" (
 	SHIFT
 	Goto parameter_parse
 ) else if /i "%1" == "--userdata-subdir" (
-	set UserDataSubdir="--userdata-subdir %2"
+	set UserDataSubdir=%2
 	SHIFT
 	SHIFT
 	Goto parameter_parse
@@ -80,7 +81,7 @@ if /i "%1"=="-h" (
 if not defined multibuild_all (
 	echo Building sdk
 	cd %base_dir%\sdk\scripts
-	call windows-build.cmd --no-pause %vsbuild% %BuildOption% --build-dir %build_dir_base%\sdk-%BuildType% --install-dir %install_dir_base%\sdk-%BuildType% --dependencies-dir %dependencies_dir% %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input  
+	call windows-build.cmd --no-pause %vsbuild% %BuildOption% --build-dir %build_dir_base%\sdk-%BuildType% --install-dir %install_dir_base%\sdk-%BuildType% --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input  
 	if !errorlevel! neq 0 (
 		echo Error while building sdk
 		exit /b !errorlevel!
@@ -88,7 +89,7 @@ if not defined multibuild_all (
 
 	echo Building designer
 	cd %base_dir%\designer\scripts
-	call windows-build.cmd --no-pause %vsbuild% %BuildOption% --build-dir %build_dir_base%\designer-%BuildType% --install-dir %install_dir_base%\designer-%BuildType% --sdk %install_dir_base%\sdk-%BuildType% --dependencies-dir %dependencies_dir% %UserDataSubdir%
+	call windows-build.cmd --no-pause %vsbuild% %BuildOption% --build-dir %build_dir_base%\designer-%BuildType% --install-dir %install_dir_base%\designer-%BuildType% --sdk %install_dir_base%\sdk-%BuildType% --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
 	if !errorlevel! neq 0 (
 		echo Error while building designer
 		exit /b !errorlevel!
@@ -96,7 +97,7 @@ if not defined multibuild_all (
 
 	echo Building extras
 	cd %base_dir%\extras\scripts
-	call win32-build.cmd --no-pause %vsbuild% %BuildOption% --build-dir %build_dir_base%\extras-%BuildType% --install-dir %install_dir_base%\extras-%BuildType% --sdk %install_dir_base%\sdk-%BuildType% --designer %install_dir_base%\designer-%BuildType% --dependencies-dir %dependencies_dir% %UserDataSubdir%
+	call win32-build.cmd --no-pause %vsbuild% %BuildOption% --build-dir %build_dir_base%\extras-%BuildType% --install-dir %install_dir_base%\extras-%BuildType% --sdk %install_dir_base%\sdk-%BuildType% --designer %install_dir_base%\designer-%BuildType% --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
 	if !errorlevel! neq 0 (
 		echo Error while building extras
 		exit /b !errorlevel!
@@ -104,18 +105,18 @@ if not defined multibuild_all (
 ) else (
 	echo Building sdk
 	cd %base_dir%\sdk\scripts
-	call windows-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\sdk --install-dir %install_dir_base%\sdk --dependencies-dir %dependencies_dir% %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input 
-	call windows-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\sdk --install-dir %install_dir_base%\sdk --dependencies-dir %dependencies_dir% %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input  
+	call windows-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\sdk --install-dir %install_dir_base%\sdk --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input 
+	call windows-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\sdk --install-dir %install_dir_base%\sdk --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input  
 
 	echo Building designer
 	cd %base_dir%\designer\scripts
-	call windows-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\designer --install-dir %install_dir_base%\designer --sdk %install_dir_base%\sdk --dependencies-dir %dependencies_dir% %UserDataSubdir%
-	call windows-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\designer --install-dir %install_dir_base%\designer --sdk %install_dir_base%\sdk --dependencies-dir %dependencies_dir% %UserDataSubdir%
+	call windows-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\designer --install-dir %install_dir_base%\designer --sdk %install_dir_base%\sdk --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
+	call windows-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\designer --install-dir %install_dir_base%\designer --sdk %install_dir_base%\sdk --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
 
 	echo Building extras
 	cd %base_dir%\extras\scripts
-	call win32-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\extras --install-dir %install_dir_base%\extras --sdk %install_dir_base%\sdk --designer %install_dir_base%\designer --dependencies-dir %dependencies_dir% %UserDataSubdir%
-	call win32-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\extras --install-dir %install_dir_base%\extras --sdk %install_dir_base%\sdk --designer %install_dir_base%\designer --dependencies-dir %dependencies_dir% %UserDataSubdir%
+	call win32-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\extras --install-dir %install_dir_base%\extras --sdk %install_dir_base%\sdk --designer %install_dir_base%\designer --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
+	call win32-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\extras --install-dir %install_dir_base%\extras --sdk %install_dir_base%\sdk --designer %install_dir_base%\designer --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
 	
 	echo Generating meta project
 	where /q python
