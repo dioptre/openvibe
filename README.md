@@ -20,39 +20,45 @@ To build OpenViBE, follow these instructions :
     
 
 ## Pulling this repository
-This can be done using "git pull git@gitlab.inria.fr:openvibe/meta.git" from command line, or with any GUI for git, like GitKraken.
+This can be done using `git pull git@gitlab.inria.fr:openvibe/meta.git` from command line, or with any GUI for git, like GitKraken.
 
 ## Pulling the submodules
 Please note that you will require a recent version of git for this step; we advise to use versions above 2.0, but git 1.7 should work.
-Use "git submodule update --init --recursive" to fetch all submodules.
+Use `git submodule update --init --recursive` to fetch all submodules.
 
 ## Installing the dependencies
 Call install_dependencies.cmd or install_dependencies.sh, depending on your system.
 A "dependencies" folder will be created on main directory.
 
+If you wish to use visual studio, it will be more handy to install python and jinja2 library with :
+	`c:\python3X\Scripts\pip.exe install jinja2`
+
+If you want to use the pygame examples, you will need python and pygame library. Pygame can be installed with
+    `pip install jinja2`
+
 ## Building the project
-To build the whole project, execute build.cmd (windows) or build.sh (linux).
+To build the whole project, execute `build.cmd` (windows) or `build.sh` (linux).
 You will require at least version 2013 of Visual Studio, or GCC 4.8
 
 ## Building the project for Visual Studio
-To build the project for visual studio with both debug and release, use "build.cmd --vsbuild-all".
+To build the project for visual studio with both debug and release, use `build.cmd --vsbuild-all`.
 After building the project, the script will attempt to generate a merged solution of the 3 projects.
 This requires python3 and jinja2.
 If you use stock python3, you can install jinja2 like so :
-	c:\python3X\Scripts\pip.exe install jinja2
+	`c:\python3X\Scripts\pip.exe install jinja2`
 The merged sln will be generated in the build directory.
 
-If you do not wish to install python, you can also use the launchvc.cmd or launchvc_debug.cmd scripts (Legacy)
+If you do not wish to install python, you can also use the `launchvc.cmd` or `launchvc_debug.cmd` scripts (Legacy)
 
 ## Updating the repository
 ### WARNING : I HAVE NO IDEA HOW IT BEHAVE IF YOU HAVE PERSONNAL COMMIT/UNCOMMITED FILES
 You can update the whole directory (including submodules) with :
-git pull
+```git pull
 git submodule sync --recursive
-git submodule update -–init --recursive
+git submodule update -–init --recursive```
 
 Aliases can be created to ease the global update process :
-git config --global alias.spull '!git pull && git submodule sync --recursive && git submodule update --init --recursive'
+`git config --global alias.spull '!git pull && git submodule sync --recursive && git submodule update --init --recursive'`
 ### END WARNING
 
 
