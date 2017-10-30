@@ -5,6 +5,7 @@ base_dir=$(dirname "$(readlink -f "$0")")
 build_dir_base="${base_dir}/build"
 install_dir_base="${base_dir}/dist"
 dependencies_dir="${base_dir}/dependencies"
+user_data_subdir="openvibe-2.0"
 
 while [[ $# -gt 0 ]]; do
 	key="$1"
@@ -33,7 +34,7 @@ while [[ $# -gt 0 ]]; do
 			shift
 			;;
 		--userdata-subdir)
-			user_data_subdir="-DOV_CONFIG_SUBDIR=$2"
+			user_data_subdir="$2"
 			shift
 			;;
 		--dependencies-dir)
@@ -50,7 +51,7 @@ done
 
 echo Building sdk
 cd ${base_dir}/sdk/scripts
-./unix-build --build-type ${BuildType} --build-dir ${build_dir_base}/sdk-${BuildType} --install-dir ${install_dir_base}/sdk-${BuildType} --dependencies-dir ${dependencies_dir} ${user_data_subdir} --build-unit --build-validation --test-data-dir ${dependencies_dir}/test-input
+./unix-build --build-type ${BuildType} --build-dir ${build_dir_base}/sdk-${BuildType} --install-dir ${install_dir_base}/sdk-${BuildType} --dependencies-dir ${dependencies_dir} --userdata-subdir ${user_data_subdir} --build-unit --build-validation --test-data-dir ${dependencies_dir}/test-input
 if [[ ! $? -eq 0 ]]; then
 	echo "Error while building sdk"
 	exit $?
@@ -58,7 +59,7 @@ fi
 
 echo Building designer
 cd ${base_dir}/designer/scripts
-./unix-build --build-type=${BuildType} --build-dir=${build_dir_base}/designer-${BuildType} --install-dir=${install_dir_base}/designer-${BuildType} --sdk=${install_dir_base}/sdk-${BuildType} ${user_data_subdir}
+./unix-build --build-type=${BuildType} --build-dir=${build_dir_base}/designer-${BuildType} --install-dir=${install_dir_base}/designer-${BuildType} --sdk=${install_dir_base}/sdk-${BuildType} --userdata-subdir ${user_data_subdir}
 if [[ ! $? -eq 0 ]]; then
 	echo "Error while building designer"
 	exit $?
@@ -66,7 +67,7 @@ fi
 
 echo Building extras
 cd ${base_dir}/extras/scripts
-./linux-build ${BuildOption} --build-dir ${build_dir_base}/extras-${BuildType} --install-dir ${install_dir_base}/extras-${BuildType} --sdk ${install_dir_base}/sdk-${BuildType} --designer ${install_dir_base}/designer-${BuildType} --dependencies-dir ${dependencies_dir} ${user_data_subdir}
+./linux-build ${BuildOption} --build-dir ${build_dir_base}/extras-${BuildType} --install-dir ${install_dir_base}/extras-${BuildType} --sdk ${install_dir_base}/sdk-${BuildType} --designer ${install_dir_base}/designer-${BuildType} --dependencies-dir ${dependencies_dir} --userdata-subdir ${user_data_subdir}
 if [[ ! $? -eq 0 ]]; then
 	echo "Error while building extras"
 	exit $?
