@@ -82,41 +82,45 @@ if not defined multibuild_all (
 	echo Building sdk
 	cd %base_dir%\sdk\scripts
 	call windows-build.cmd --no-pause %vsbuild% %BuildOption% --build-dir %build_dir_base%\sdk-%BuildType% --install-dir %install_dir_base%\sdk-%BuildType% --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input  
-	if !errorlevel! neq 0 (
-		echo Error while building sdk
-		exit /b !errorlevel!
-	)
+	call :check_errors !errorlevel! "!BuildType! SDK" || exit /b !_errlevel!
 
 	echo Building designer
 	cd %base_dir%\designer\scripts
 	call windows-build.cmd --no-pause %vsbuild% %BuildOption% --build-dir %build_dir_base%\designer-%BuildType% --install-dir %install_dir_base%\designer-%BuildType% --sdk %install_dir_base%\sdk-%BuildType% --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
-	if !errorlevel! neq 0 (
-		echo Error while building designer
-		exit /b !errorlevel!
-	)
+	call :check_errors !errorlevel! "!BuildType! Designer" || exit /b !_errlevel!
 
 	echo Building extras
 	cd %base_dir%\extras\scripts
 	call win32-build.cmd --no-pause %vsbuild% %BuildOption% --build-dir %build_dir_base%\extras-%BuildType% --install-dir %install_dir_base%\extras-%BuildType% --sdk %install_dir_base%\sdk-%BuildType% --designer %install_dir_base%\designer-%BuildType% --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
-	if !errorlevel! neq 0 (
-		echo Error while building extras
-		exit /b !errorlevel!
-	)
+	call :check_errors !errorlevel! "!BuildType! Extras" || exit /b !_errlevel!
+	
 ) else (
 	echo Building sdk
 	cd %base_dir%\sdk\scripts
 	call windows-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\sdk --install-dir %install_dir_base%\sdk --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input 
+	call :check_errors !errorlevel! "Debug SDK" || exit /b !_errlevel!
+	
 	call windows-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\sdk --install-dir %install_dir_base%\sdk --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir% --build-unit --build-validation --test-data-dir %dependencies_dir%\test-input  
-
+	call :check_errors !errorlevel! "Release SDK" || exit /b !_errlevel!
+	
+	
 	echo Building designer
 	cd %base_dir%\designer\scripts
 	call windows-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\designer --install-dir %install_dir_base%\designer --sdk %install_dir_base%\sdk --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
+	call :check_errors !errorlevel! "Debug Designer" || exit /b !_errlevel!
+	
 	call windows-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\designer --install-dir %install_dir_base%\designer --sdk %install_dir_base%\sdk --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
-
+	call :check_errors !errorlevel! "Release Designer" || exit /b !_errlevel!
+	
+	
 	echo Building extras
 	cd %base_dir%\extras\scripts
 	call win32-build.cmd --no-pause --vsbuild --debug --build-dir %build_dir_base%\extras --install-dir %install_dir_base%\extras --sdk %install_dir_base%\sdk --designer %install_dir_base%\designer --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
+	call :check_errors !errorlevel! "Debug Extras" || exit /b !_errlevel!
+	
 	call win32-build.cmd --no-pause --vsbuild --release --build-dir %build_dir_base%\extras --install-dir %install_dir_base%\extras --sdk %install_dir_base%\sdk --designer %install_dir_base%\designer --dependencies-dir %dependencies_dir% --userdata-subdir %UserDataSubdir%
+	call :check_errors !errorlevel! "Release Extras" || exit /b !_errlevel!
+	
 	
 	echo Generating meta project
 	where /q python
@@ -132,3 +136,13 @@ if not defined multibuild_all (
 		exit /b !errorlevel!
 	)
 )
+
+
+:check_errors
+SET _errlevel=%1
+SET _stageName=%2
+if !_errlevel! neq 0 (
+	echo Error while building !_stageName!
+	exit /b !_errlevel!
+)
+
