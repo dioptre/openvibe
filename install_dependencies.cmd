@@ -25,37 +25,38 @@ if /i "%1"=="-h"  (
 	SHIFT
 	SHIFT
 	Goto parameter_parse
+) else if /i "%1" neq "" (
+	echo Unknown parameter "%1"
+	exit /b 1
 )
 
 if not exist "%dependencies_dir%\arch\data" ( mkdir "%dependencies_dir%\arch\data" )
 if not exist "%dependencies_dir%\arch\build\windows" ( mkdir "%dependencies_dir%\arch\build\windows" )
 rem if not exist "%dependencies_dir%_x64\arch\build\windows" ( mkdir "%dependencies_dir%_x64\arch\build\windows" )
 
-set base_dir=%~dp0
+
 echo Installing sdk dependencies
 cd %base_dir%\sdk\scripts
+powershell.exe -NoProfile -ExecutionPolicy Bypass -file "%base_dir%\sdk\scripts\windows-get-dependencies.ps1" -manifest_file .\windows-build-tools.txt -dest_dir %dependencies_dir%
+call :check_errors !errorlevel! "Build tools" || exit /b !_errlevel!
+
 powershell.exe -NoProfile -ExecutionPolicy Bypass -file "%base_dir%\sdk\scripts\windows-get-dependencies.ps1" -manifest_file .\windows-dependencies-x86.txt -dest_dir %dependencies_dir%
+call :check_errors !errorlevel! "SDK" || exit /b !_errlevel!
+
 powershell.exe -NoProfile -ExecutionPolicy Bypass -file "%base_dir%\sdk\scripts\windows-get-dependencies.ps1" -manifest_file .\tests-data.txt -dest_dir %dependencies_dir%
-if !errorlevel! neq 0 (
-	echo Error while installing SDK dependencies
-	exit /b !errorlevel!
-)
+call :check_errors !errorlevel! "SDK tests" || exit /b !_errlevel!
 
 echo Installing Designer dependencies
 cd %base_dir%\designer\scripts
 powershell.exe -NoProfile -ExecutionPolicy Bypass -file "%base_dir%\sdk\scripts\windows-get-dependencies.ps1" -manifest_file .\windows-dependencies.txt -dest_dir %dependencies_dir%
-if !errorlevel! neq 0 (
-	echo Error while installing Designer dependencies
-	exit /b !errorlevel!
-)
+call :check_errors !errorlevel! "Designer" || exit /b !_errlevel!
+
 
 echo Installing OpenViBE extras dependencies
 cd %base_dir%\extras\scripts
 powershell.exe -NoProfile -ExecutionPolicy Bypass -file "%base_dir%\sdk\scripts\windows-get-dependencies.ps1" -manifest_file .\windows-dependencies.txt -dest_dir %dependencies_dir%
-if !errorlevel! neq 0 (
-	echo Error while building extras
-	exit /b !errorlevel!
-)
+call :check_errors !errorlevel! "Extras" || exit /b !_errlevel!
+
 
 echo Creating OpenViBE extras dependency path setup script
 set "dependency_cmd=%dependencies_dir%\win32-dependencies.cmd"
@@ -66,4 +67,13 @@ echo. >>%dependency_cmd%
 type %base_dir%\extras\scripts\win32-dependencies.cmd-base >>%dependency_cmd%
 
 echo Done.
+exit /b 0
+
+:check_errors
+SET _errlevel=%1
+SET _stageName=%2
+if !_errlevel! neq 0 (
+	echo Error while installing !_stageName! dependencies
+	exit /b !_errlevel!
+)
 

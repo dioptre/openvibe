@@ -9,28 +9,17 @@ node("${NodeName}") {
 		]
 	def BuildOption = BuildOptions[BuildType]
 
-	def build_dir = {
-		if(isUnix()) {
-			echo "${WORKSPACE}/build"
-		} else {
-			echo "${WORKSPACE}\build"
-		}
+	if(isUnix()) {
+		build_dir = "${WORKSPACE}/build"
+		dist_dir = "${WORKSPACE}/dist"
+		dependencies_dir = "/builds/dependencies"
+	} else {
+		build_dir = "${WORKSPACE}\\build"
+		dist_dir = "${WORKSPACE}\\dist"
+		dependencies_dir = "c:\\builds\\dependencies"
 	}
-
-	def dist_dir = {
-		if(isUnix()) {
-			echo "${WORKSPACE}/build"
-		} else {
-			echo "${WORKSPACE}\build"
-		}
-	}
-	def dependencies_dir = {
-		if(isUnix()) {
-			echo "/builds/dependencies"
-		} else {
-			error("TODO")
-		}
-	}
+	
+	user_data_subdir = "openvibe-2.0"
 	
 	git url: 'https://gitlab.inria.fr/openvibe/meta.git', branch: "master"
 	shortCommitMeta = get_short_commit()
@@ -44,9 +33,9 @@ node("${NodeName}") {
 
 			dir ("scripts") {
 				if(isUnix()) {
-					sh "./unix-build --build-type ${params.BuildType} --build-dir ${build_dir}/sdk-${params.BuildType} --install-dir ${dist_dir}/sdk-${params.BuildType} --dependencies-dir ${dependencies_dir} --test-data-dir ${dependencies_dir}/test-input --build-unit --build-validation"
+					sh "./unix-build --build-type ${params.BuildType} --build-dir ${build_dir}/sdk-${params.BuildType} --install-dir ${dist_dir}/sdk-${params.BuildType} --dependencies-dir ${dependencies_dir} --userdata-subdir ${user_data_subdir} --build-unit --build-validation --test-data-dir ${dependencies_dir}/test-input"
 				} else {
-					bat "windows-build.cmd --no-pause ${BuildOption} --build-dir ${build_dir}\sdk-${params.BuildType} --install-dir ${dist_dir}\sdk-${params.BuildType} --dependencies-dir ${dependencies_dir} --userdata-subdir %UserDataSubdir% --build-unit --build-validation --test-data-dir ${dependencies_dir}\test-input"
+					bat "windows-build.cmd --no-pause ${BuildOption} --build-dir ${build_dir}\\sdk-${params.BuildType} --install-dir ${dist_dir}\\sdk-${params.BuildType} --dependencies-dir ${dependencies_dir} --userdata-subdir ${user_data_subdir} --build-unit --build-validation --test-data-dir ${dependencies_dir}\\test-input"
 				}
 			}
 		}
@@ -62,7 +51,9 @@ node("${NodeName}") {
 			if(isUnix()) {
 				sh './ctest-launcher.sh -T Test ; exit 0'
 			} else {
-				bat './ctest-launcher.cmd -T Test ; exit 0'
+				withEnv(["PATH+OV=${dist_dir}\\sdk-${params.BuildType}\\bin"]) {
+					bat 'ctest-launcher.cmd -T Test ; exit 0'
+				}
 			}
 			step([$class: 'XUnitBuilder',
 				thresholds: [[$class: 'FailedThreshold', unstableThreshold: '0']],
@@ -71,6 +62,7 @@ node("${NodeName}") {
 			])
 		}
 	}
+
 	stage('Build Designer') {
 		dir("designer") {
 			git url: 'https://gitlab.inria.fr/openvibe/designer.git', branch: "${params.DesignerBranch}"
@@ -81,8 +73,8 @@ node("${NodeName}") {
 				if(isUnix()) {
 					sh "./unix-build --build-type=${params.BuildType} --build-dir=${build_dir}/designer-${params.BuildType} --install-dir=${dist_dir}/designer-${params.BuildType} --sdk=${dist_dir}/sdk-${params.BuildType}"
 				} else {
-					bat "windows-build.cmd --no-pause ${BuildOption} --build-dir ${build_dir}\designer-${params.BuildType} --install-dir ${dist_dir}\designer-${params.BuildType} --sdk ${dist_dir}\sdk-${params.BuildType} --dependencies-dir ${dependencies_dir} --userdata-subdir %UserDataSubdir%"
-				}
+					bat "windows-build.cmd --no-pause ${BuildOption} --build-dir ${build_dir}\\designer-${params.BuildType} --install-dir ${dist_dir}\\designer-${params.BuildType} --sdk ${dist_dir}\\sdk-${params.BuildType} --dependencies-dir ${dependencies_dir} --userdata-subdir ${user_data_subdir}"
+				}	
 			}
 		}
 	}
@@ -96,7 +88,7 @@ node("${NodeName}") {
 				if(isUnix()) {
 					sh "./linux-build ${BuildOption} --build-dir ${build_dir}/extras-${params.BuildType} --install-dir ${dist_dir}/extras-${params.BuildType} --sdk ${dist_dir}/sdk-${params.BuildType} --designer ${dist_dir}/designer-${params.BuildType} --dependencies-dir ${dependencies_dir}"
 				} else {
-					bat "win32-build.cmd --no-pause ${BuildOption} --build-dir ${build_dir}\extras-${params.BuildType} --install-dir ${dist_dir}\extras-${params.BuildType} --sdk ${dist_dir}\sdk-${params.BuildType} --designer ${dist_dir}\designer-${params.BuildType} --dependencies-dir ${dependencies_dir} --userdata-subdir %UserDataSubdir%"
+					bat "win32-build.cmd --no-pause ${BuildOption} --build-dir ${build_dir}\\extras-${params.BuildType} --install-dir ${dist_dir}\\extras-${params.BuildType} --sdk ${dist_dir}\\sdk-${params.BuildType} --designer ${dist_dir}\\designer-${params.BuildType} --dependencies-dir ${dependencies_dir} --userdata-subdir ${user_data_subdir}"
 				}
 			}
 		}
@@ -111,15 +103,17 @@ node("${NodeName}") {
 					sh "ctest -T Test ; exit 0"
 				}
 			} else {
-				bat "ctest -T Test ; exit 0"
+				withEnv(["PATH+CTEST=${dependencies_dir}\\cmake\\bin", 
+						 "PATH+OV=${dist_dir}\\extras-${params.BuildType}"]) {
+					bat "ctest -T Test ; exit 0"
+				}
 			}
 			step([$class: 'XUnitBuilder',
 				thresholds: [[$class: 'FailedThreshold', unstableThreshold: '0']],
-				tools: [[$class: 'CTestType', pattern: "Testing/*/Test.xml"],]
-			])
+				tools: [[$class: 'CTestType', pattern: "Testing/*/Test.xml"],]])
 		}
 	}
-	
+
 	stage('Create Archive') {
 		if(isUnix()) {
 			dir("package") {
@@ -130,9 +124,9 @@ node("${NodeName}") {
 			error("TODO")
 		}
 	}
-	
+
 	stage('Test one click scripts') {
-		dir("build") { 
+		dir("build") {
 			deleteDir()
 		}
 		if(isUnix()) {
@@ -142,10 +136,11 @@ node("${NodeName}") {
 		}
 	}
 }
+
 def get_short_commit() {
 	if(isUnix()) {
 		sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
 	} else {
-		bat(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+		bat(returnStdout: true, script: "@git log -n 1 --pretty=format:\'%%h\'").trim()
 	}
 }
