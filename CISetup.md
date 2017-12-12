@@ -21,7 +21,7 @@ See https://www.sghill.net/how-do-i-backup-jenkins-jobs.html or use Jenkins-cli 
 # Windows machines
 Microsoft website doesn't list the old versions of VS
 You can get vs 2013 at this link : http://download.microsoft.com/download/7/2/E/72E0F986-D247-4289-B9DC-C4FB07374894/wdexpress_full.exe
-Python should be installed + numpy
+Python 3.4+ should be installed + numpy
 
 # Linux machines
 Package xvfb is required
