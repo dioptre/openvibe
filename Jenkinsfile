@@ -2,6 +2,8 @@ node("${NodeName}") {
 	// Add some informations about the build
 	manager.addShortText("${params.BuildType}", "red", "white", "0px", "white")
 	manager.addShortText("${NodeName}", "blue", "white", "0px", "white")
+	manager.addShortText("${params.reposOrigin}", "green", "white", "0px", "white")
+
 
 	def BuildOptions = [
 		"Release" : "--release",
@@ -41,6 +43,13 @@ node("${NodeName}") {
 	shortCommitMeta = get_short_commit()
 	manager.addShortText("Meta : ${params.SDKBranch} (${shortCommitMeta})", "black", "white", "0px", "white")
 
+	dir("build") {
+		deleteDir()
+	}
+    dir("dist") {
+		deleteDir()
+	}
+	
 	stage('Build SDK') {
 		dir("sdk") { 
 			git url: "${url_sdk}", branch: "${params.SDKBranch}", credentialsId: "${cred_sdk}"
@@ -68,7 +77,7 @@ node("${NodeName}") {
 				sh './ctest-launcher.sh -T Test ; exit 0'
 			} else {
 				withEnv(["PATH+OV=${dist_dir}\\sdk-${params.BuildType}\\bin"]) {
-					bat 'ctest-launcher.cmd -T Test ; exit 0'
+					bat 'ctest-launcher.cmd -T Test -E uoTimeTest ; exit 0'
 				}
 			}
 			step([$class: 'XUnitBuilder',

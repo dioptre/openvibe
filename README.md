@@ -1,8 +1,9 @@
 |OpenViBE meta repository| |README|  
 ===================================
 Build Status :  
-- Ubuntu 16.04 [![Build Status](https://ci.inria.fr/openvibe-qualif/buildStatus/icon?job=OpenViBE-Nightly-Ubuntu16.04&style=plastic)](https://ci.inria.fr/openvibe-qualif/job/OpenViBE-Nightly-Ubuntu16.04)
-- Fedora 25 [![Build Status](https://ci.inria.fr/openvibe-qualif/buildStatus/icon?job=OpenViBE-Nightly-Fedora25&style=plastic)](https://ci.inria.fr/openvibe-qualif/job/OpenViBE-Nightly-Fedora25)
+- Ubuntu 16.04 [![Build Status](https://ci.inria.fr/openvibe/buildStatus/icon?job=OpenViBE-Nightly-Ubuntu16.04&style=plastic)](https://ci.inria.fr/openvibe-qualif/job/OpenViBE-Nightly-Ubuntu16.04)
+- Fedora 25 [![Build Status](https://ci.inria.fr/openvibe/buildStatus/icon?job=OpenViBE-Nightly-Fedora25&style=plastic)](https://ci.inria.fr/openvibe-qualif/job/OpenViBE-Nightly-Fedora25)
+- Windows 7 [![Build Status](https://ci.inria.fr/openvibe/buildStatus/icon?job=OpenViBE-Nightly-Win7&style=plastic)](https://ci.inria.fr/openvibe-qualif/job/OpenViBE-Nightly-Win7)
 
 OpenViBE project is now divided into 3 parts :   
 - SDK, that contains the certifiable core and plugins of OpenViBE
