@@ -1,6 +1,6 @@
-build/
-dist/
-dependencies/
+/build
+/dist
+/dependencies
 OpenViBE-Meta.sln
 OpenViBE-Meta.sdf
 OpenViBE-Meta.v12.suo
