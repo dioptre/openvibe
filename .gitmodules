@@ -1,12 +1,18 @@
+#
+# This default configuration file allows anonymous access. If you're a 
+# developer with account on http://gitlab.inria.fr and need to push, 
+# please use the git versions of the urls.
+# 
 [submodule "sdk"]
 	path = sdk
-	url = git@gitlab.inria.fr:openvibe/sdk.git
+	url = https://gitlab.inria.fr/openvibe/sdk.git
 	branch = master
 [submodule "designer"]
 	path = designer
-	url = git@gitlab.inria.fr:openvibe/designer.git
+	url = https://gitlab.inria.fr/openvibe/designer.git
 	branch = master
 [submodule "extras"]
 	path = extras
-	url = git@gitlab.inria.fr:openvibe/extras.git
+	url = https://gitlab.inria.fr/openvibe/extras.git
 	branch = master
+
