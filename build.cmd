@@ -8,7 +8,7 @@ set base_dir=%~dp0
 set build_dir_base=%base_dir%\build
 set install_dir_base=%base_dir%\dist
 set dependencies_dir=%base_dir%\dependencies
-set UserDataSubdir=openvibe-2.0
+set UserDataSubdir=openvibe-2.1.0
 
 :parameter_parse
 if /i "%1"=="-h" (

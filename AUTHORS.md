@@ -7,7 +7,7 @@
 		 
 |People|
 
-OV 2.0 staff in alphabetical order
+OV 2.1.0 staff in alphabetical order
 
 - Laurent Bonnet / Mensia
 - Jerome Chabrol / Inria
